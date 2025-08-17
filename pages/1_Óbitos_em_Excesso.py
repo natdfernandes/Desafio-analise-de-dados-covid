@@ -4,6 +4,8 @@ import pandas as pd
 country_header = "country"
 deaths_header = "deaths"
 year_header = "year"
+expected_deaths_header = "expected_deaths"
+excess_deaths_header = "excess_deaths"
 filter_by_country_key = "filter_by_country"
 
 
@@ -83,8 +85,13 @@ display_about_content()
 
 filtered_df = filter_by_country(df)
 
-default_view, deaths_by_countries, deaths_by_year = st.tabs(
-    ["Visão geral", "Mortes por Países", "Mortes por Ano"]
+default_view, deaths_by_countries, deaths_by_year, expected_excess_deaths = st.tabs(
+    [
+        "Visão geral",
+        "Mortes por Países",
+        "Mortes por Ano",
+        "Expectativa/Excesso de Mortes",
+    ]
 )
 
 with default_view:
@@ -107,5 +114,24 @@ with deaths_by_year:
 
     if view == "Gráfico":
         st.line_chart(data=grouped_df, x=year_header, y=deaths_header)
+    else:
+        st.write(grouped_df)
+with expected_excess_deaths:
+    grouped_df = (
+        filtered_df.groupby(country_header)[
+            [expected_deaths_header, excess_deaths_header]
+        ]
+        .sum()
+        .reset_index()
+    )
+
+    view = handle_data_view("view_by_expected_excess_deaths")
+
+    if view == "Gráfico":
+        st.bar_chart(
+            grouped_df.set_index(country_header)[
+                [expected_deaths_header, excess_deaths_header]
+            ]
+        )
     else:
         st.write(grouped_df)
