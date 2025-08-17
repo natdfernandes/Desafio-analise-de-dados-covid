@@ -4,6 +4,7 @@ import pandas as pd
 country_header = "country"
 deaths_header = "deaths"
 year_header = "year"
+filter_by_country_key = "filter_by_country"
 
 st.title("Óbitos em Excesso Durante a Pandemia de Coronavírus")
 
@@ -42,17 +43,22 @@ df = pd.read_csv(url)
 filtered_df = df
 
 
+def update_filter_by_country():
+    st.query_params[country_header] = st.session_state[filter_by_country_key]
+
+
 def filter_by_country(df: pd.DataFrame):
     countries = df[country_header].unique()
 
     selected_countries = st.multiselect(
         label="Selecione os paises",
         options=countries,
+        key=filter_by_country_key,
         default=st.query_params.get_all(country_header),
+        on_change=update_filter_by_country,
     )
 
     if selected_countries:
-        st.query_params[country_header] = selected_countries
         return df[(df[country_header].isin(selected_countries))]
     return df
 
