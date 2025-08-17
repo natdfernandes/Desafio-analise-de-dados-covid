@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import supabase_db as db
 
 country_header = "country"
 deaths_header = "deaths"
@@ -48,7 +49,9 @@ def load_data():
 
 
 def update_filter_by_country():
-    st.query_params[country_header] = st.session_state[filter_by_country_key]
+    filter_by_country = st.session_state[filter_by_country_key]
+    db.insert_history("Óbitos_em_Excesso", str({country_header: filter_by_country}))
+    st.query_params[country_header] = filter_by_country
 
 
 def filter_by_country(df: pd.DataFrame):

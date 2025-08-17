@@ -1,8 +1,9 @@
 import streamlit as st
+import supabase_db as db
 
 st.set_page_config(page_title="Desafio análise de dados Covid", page_icon="🏥")
 
-st.title("COVID-19 nos EUA (2020–2023)")
+st.title("COVID-19 nos EUA")
 
 st.markdown(
     """
@@ -18,3 +19,7 @@ st.markdown(
     O objetivo é proporcionar uma visão clara, acessível e explorável da pandemia entre 2020 e 2023, apoiando estudos, decisões e reflexões com base em dados confiáveis.
     """
 )
+
+st.header("Histórico de buscas")
+history = db.get_history()
+st.write(history.data)
