@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 
+country_header = "country"
+
 st.title("Óbitos em Excesso Durante a Pandemia de Coronavírus")
 
 with st.expander("Sobre está página"):
@@ -35,11 +37,23 @@ with st.expander("Sobre está página"):
 url = "https://raw.githubusercontent.com/nytimes/covid-19-data/refs/heads/master/excess-deaths/deaths.csv"
 df = pd.read_csv(url)
 
-countries = df["country"].unique()
-selected_countries = st.multiselect("Selecione os paises", countries)
-
 filtered_df = df
-if selected_countries:
-    filtered_df = df[(df["country"].isin(selected_countries))]
 
+
+def filter_by_country(df: pd.DataFrame):
+    countries = df[country_header].unique()
+
+    selected_countries = st.multiselect(
+        label="Selecione os paises",
+        options=countries,
+        default=st.query_params.get_all(country_header),
+    )
+
+    if selected_countries:
+        st.query_params[country_header] = selected_countries
+        return df[(df[country_header].isin(selected_countries))]
+    return df
+
+
+filtered_df = filter_by_country(df)
 st.write(filtered_df)
