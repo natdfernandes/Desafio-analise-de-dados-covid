@@ -1,5 +1,6 @@
 # Desafio análise de dados covid-19
 Repositório destinado ao desafio de análise de dados sobre a covid-19. 
+O projeto está hospedado no seguinte link: https://verificacao-de-dados-covid.streamlit.app/
 
 ## Iniciar streamLit
 
