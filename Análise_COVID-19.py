@@ -3,7 +3,7 @@ import supabase_db as db
 
 st.set_page_config(page_title="Desafio análise de dados Covid", page_icon="🏥")
 
-st.title("COVID-19 nos EUA")
+st.title("Análise COVID-19")
 
 st.markdown(
     """
@@ -16,7 +16,7 @@ st.markdown(
     * **Filtros por período, estado e tipo de dado (casos/óbitos)** para análises específicas.
     * **Mapas temáticos** (se aplicável) com distribuição geográfica dos dados ao longo do tempo.
 
-    O objetivo é proporcionar uma visão clara, acessível e explorável da pandemia entre 2020 e 2023, apoiando estudos, decisões e reflexões com base em dados confiáveis.
+    O objetivo é proporcionar uma visão clara, acessível e explorável da pandemia, apoiando estudos, decisões e reflexões com base em dados confiáveis.
     """
 )
 
