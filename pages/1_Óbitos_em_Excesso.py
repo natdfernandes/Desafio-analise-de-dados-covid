@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 
 country_header = "country"
+deaths_header = "deaths"
+year_header = "year"
 
 st.title("Óbitos em Excesso Durante a Pandemia de Coronavírus")
 
@@ -56,4 +58,35 @@ def filter_by_country(df: pd.DataFrame):
 
 
 filtered_df = filter_by_country(df)
-st.write(filtered_df)
+default_view, deaths_by_countries, deaths_by_year = st.tabs(
+    ["Visão geral", "Mortes por Países", "Mortes por Ano"]
+)
+
+with default_view:
+    st.write(filtered_df)
+with deaths_by_countries:
+    grouped_df = filtered_df.groupby(country_header)[deaths_header].sum().reset_index()
+
+    view = st.selectbox(
+        label="Selecione a visão",
+        options=["Gráfico", "Tabela"],
+        key="view_by_countries",
+    )
+
+    if view == "Gráfico":
+        st.bar_chart(data=grouped_df, x=country_header, y=deaths_header)
+    else:
+        st.write(grouped_df)
+with deaths_by_year:
+    filtered_df = filtered_df[filtered_df[year_header].astype(str).str.isdigit()]
+
+    grouped_df = filtered_df.groupby(year_header)[deaths_header].sum().reset_index()
+
+    view = st.selectbox(
+        label="Selecione a visão", options=["Gráfico", "Tabela"], key="view_by_year"
+    )
+
+    if view == "Gráfico":
+        st.line_chart(data=grouped_df, x=year_header, y=deaths_header)
+    else:
+        st.write(grouped_df)
